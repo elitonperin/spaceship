@@ -29,8 +29,6 @@ Animador.prototype = {
 			this.sprites[i].desenhar();
 		}
 
-		this.desenharRetangulosDeColisao();
-
 		this.colisor.processar();
 
 		var vm = this;
