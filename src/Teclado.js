@@ -1,35 +1,37 @@
 var SETA_ESQUERDA = 37;
 var SETA_DIREITA = 39;
+var SETA_CIMA = 38;
+var SETA_BAIXO = 40;
 var ESPACO = 32;
 
-function Teclado(elemento){
-	var vm = this;
-	vm.elemento = elemento;
-	vm.pressionadas = [];
-	vm.disparadas = [];
-	vm.funcoesDisparo = [];
+function Teclado(elemento) {
+    var vm = this;
+    vm.elemento = elemento;
+    vm.pressionadas = [];
+    vm.disparadas = [];
+    vm.funcoesDisparo = [];
 
-	elemento.addEventListener('keydown', function(evento){
-		var tecla = evento.keyCode;
-		vm.pressionadas[tecla] = true;
+    elemento.addEventListener('keydown', function(evento) {
+        var tecla = evento.keyCode;
+        vm.pressionadas[tecla] = true;
 
-		if(vm.funcoesDisparo[tecla] && !vm.disparadas[tecla]){
-			vm.disparadas[tecla] = true;
-			vm.funcoesDisparo[tecla]();
-		}
-	});
+        if (vm.funcoesDisparo[tecla] && !vm.disparadas[tecla]) {
+            vm.disparadas[tecla] = true;
+            vm.funcoesDisparo[tecla]();
+        }
+    });
 
-	elemento.addEventListener('keyup', function(evento){
-		var tecla = evento.keyCode;
-		vm.pressionadas[tecla] = false;
-		vm.disparadas[tecla] = false;
-	});
+    elemento.addEventListener('keyup', function(evento) {
+        var tecla = evento.keyCode;
+        vm.pressionadas[tecla] = false;
+        vm.disparadas[tecla] = false;
+    });
 }
 Teclado.prototype = {
-	pressionada: function(tecla){
-		return this.pressionadas[tecla];
-	},
-	disparou: function(tecla, callback){
-		this.funcoesDisparo[tecla] = callback;
-	}	
+    pressionada: function(tecla) {
+        return this.pressionadas[tecla];
+    },
+    disparou: function(tecla, callback) {
+        this.funcoesDisparo[tecla] = callback;
+    }
 };
