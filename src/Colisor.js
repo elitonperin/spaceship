@@ -5,32 +5,34 @@ function Colisor() {
 }
 Colisor.prototype = {
     novoSprite: function(sprite) {
-        sprite.colisor = this;
         this.sprites.push(sprite);
+        sprite.colisor = this;
     },
     processar: function() {
-        var jaTestados = {};
-        var quantidade = this.sprites.length;
-        var i = 0;
-        var j = 0;
-        for (; i < quantidade; i++) {
-            for (; j < quantidade; j++) {
-                if (i === j) {
-                    continue;
-                }
+        // Inicio com um objeto vazio
+        var jaTestados = new Object();
 
-                var id1 = this.stringUnica();
-                var id2 = this.stringUnica();
+        for (var i in this.sprites) {
+            for (var j in this.sprites) {
+                // Não colidir um sprite com ele mesmo
+                if (i == j) continue;
 
-                if (!jaTestados[id1]) {
-                    jaTestados[id1] = [];
-                }
-                if (!jaTestados[id2]) {
-                    jaTestados[id2] = [];
-                }
+                // Gerar strings únicas para os objetos
+                var id1 = this.stringUnica(this.sprites[i]);
+                var id2 = this.stringUnica(this.sprites[j]);
 
-                if (!(jaTestados[id1].indexOf(id2) > 0 || jaTestados[id2].indexOf(id1) > 0)) {
+                // Criar os arrays se não existirem
+                if (!jaTestados[id1]) jaTestados[id1] = [];
+                if (!jaTestados[id2]) jaTestados[id2] = [];
+
+                // Teste de repetição
+                if (!(jaTestados[id1].indexOf(id2) >= 0 ||
+                    jaTestados[id2].indexOf(id1) >= 0)) {
+
+                    // Abstrair a colisão
                     this.testarColisao(this.sprites[i], this.sprites[j]);
+
+                    // Registrando o teste
                     jaTestados[id1].push(id2);
                     jaTestados[id2].push(id1);
                 }
@@ -39,50 +41,67 @@ Colisor.prototype = {
 
         this.processarExclusoes();
     },
-    stringUnica: function() {
-        var numero = Math.floor((Math.random() * 2500) + 1);
-        return "Retangulo_" + numero;
-    },
     testarColisao: function(sprite1, sprite2) {
+        // Obter os retângulos de colisão de cada sprite
         var rets1 = sprite1.retangulosColisao();
         var rets2 = sprite2.retangulosColisao();
-        var i = 0;
-        var j = 0;
-        var qtdRets1 = rets1.length;
-        var qtdRets2 = rets2.length;
+        var colidiu = false;
 
-        colisoes: for (; i < qtdRets1; i++) {
-
-            for (; j < qtdRets2; j++) {
+        // Testar as colisões entre eles
+        colisoes: for (var i in rets1) {
+            for (var j in rets2) {
+                // Abstraindo a fórmula!
                 if (this.retangulosColidem(rets1[i], rets2[j])) {
+                    // Eles colidem, vamos notificá-los
                     sprite1.colidiuCom(sprite2);
                     sprite2.colidiuCom(sprite1);
 
-                    if (this.aoColidir) {
-                        this.aoColidir(sprite1, sprite2);
-                    }
+                    // Tratador geral
+                    if (this.aoColidir) this.aoColidir(sprite1, sprite2);
 
+                    // Não precisa terminar de ver todos os retângulos
                     break colisoes;
                 }
             }
         }
     },
-    retangulosColidem: function(sprite1, sprite2) {
-        return (sprite1.x + sprite1.largura) > sprite2.x && sprite1.x < (sprite2.x + sprite2.largura) && (sprite1.y + sprite1.altura) > sprite2.y && sprite1.y < (sprite2.y + sprite2.altura);
+    retangulosColidem: function(ret1, ret2) {
+        // Fórmula de interseção de retângulos
+        return (ret1.x + ret1.largura) > ret2.x &&
+            ret1.x < (ret2.x + ret2.largura) &&
+            (ret1.y + ret1.altura) > ret2.y &&
+            ret1.y < (ret2.y + ret2.altura);
+    },
+    stringUnica: function(sprite) {
+        var str = '';
+        var retangulos = sprite.retangulosColisao();
+
+        for (var i in retangulos) {
+            str += 'x:' + retangulos[i].x + ',' +
+                'y:' + retangulos[i].y + ',' +
+                'l:' + retangulos[i].largura + ',' +
+                'a:' + retangulos[i].altura + '\n';
+        }
+
+        return str;
     },
     excluirSprite: function(sprite) {
         this.spritesExcluir.push(sprite);
     },
     processarExclusoes: function() {
+        // Criar um novo array
         var novoArray = [];
-        var i = 0;
-        var qtd = this.sprites.length;
-        for (; i < qtd; i++) {
-            if (this.spritesExcluir.indexOf(this.sprites[i]) == -1) {
+
+        // Adicionar somente os elementos não excluídos
+        for (var i in this.sprites) {
+            if (this.spritesExcluir.indexOf(this.sprites[i]) == -1)
                 novoArray.push(this.sprites[i]);
-            }
         }
+
+        // Limpar o array de exclusões
         this.spritesExcluir = [];
+
+        // Substituir o array velho pelo novo
         this.sprites = novoArray;
     }
-};
+}

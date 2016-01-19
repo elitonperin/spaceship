@@ -25,9 +25,6 @@ Nave.prototype = {
         this.teclado.disparou(ESPACO, function() {
             vm.atirar();
         });
-
-
-
     },
     desenhar: function() {
         this.context.drawImage(this.imagem, this.x, this.y, this.imagem.width, this.imagem.height);
@@ -69,10 +66,11 @@ Nave.prototype = {
         ctx.restore();
     },
     colidiuCom: function(sprite) {
-
+        /**
         if (sprite instanceof Ovni) {
             this.animador.desligar();
             alert("Fim de jogo");
         }
+        **/
     }
 };
