@@ -3,14 +3,14 @@ function Tiro(context, nave, cor) {
     this.nave = nave;
     this.largura = 4;
     this.altura = 20;
-    this.x = nave.x + nave.imagem.width / 2 - this.largura / 2;
+    this.x = nave.x + 18;
     this.y = nave.y - this.altura;
-    this.velocidade = 10;
+    this.velocidade = 600;
     this.cor = cor;
 }
 Tiro.prototype = {
     atualizar: function() {
-        this.y -= this.velocidade;
+        this.y -= this.velocidade * this.animador.decorrido / 1000;
         if (this.y < 0) {
             this.animador.excluirSprite(this);
             this.colisor.excluirSprite(this);
@@ -22,7 +22,6 @@ Tiro.prototype = {
         ctx.fillStyle = this.cor;
         ctx.fillRect(this.x, this.y, this.largura, this.altura);
         ctx.restore();
-        this.desenharRetangulosDeColisao();
     },
     retangulosColisao: function() {
         return [{
@@ -46,6 +45,6 @@ Tiro.prototype = {
         ctx.restore();
     },
     colidiuCom: function(sprite) {
-        console.log('pow');
+
     }
 };

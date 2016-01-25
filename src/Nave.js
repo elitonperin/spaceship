@@ -6,29 +6,44 @@ function Nave(context, teclado, imagem, x, y, velocidade) {
     this.x = x;
     this.y = y;
     this.velocidade = velocidade;
+
+    this.spriteSheet = new Spritesheet(context, imagem, 3, 2);
+    this.spriteSheet.linha = 0;
+    this.spriteSheet.intervalo = 100;
 }
 Nave.prototype = {
     atualizar: function() {
         var vm = this;
+        var incremento = this.velocidade * this.animador.decorrido / 1000;
         if (this.teclado.pressionada(SETA_ESQUERDA) && this.x > 0) {
-            this.x -= this.velocidade;
+            this.x -= incremento;
         }
-        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - this.imagem.width) {
-            this.x += this.velocidade;
+        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 36) {
+            this.x += incremento;
         }
         if (this.teclado.pressionada(SETA_CIMA) && this.y > 0) {
-            this.y -= this.velocidade;
+            this.y -= incremento;
         }
-        if (this.teclado.pressionada(SETA_BAIXO) && this.y < this.context.canvas.height - this.imagem.height) {
-            this.y += this.velocidade;
+        if (this.teclado.pressionada(SETA_BAIXO) && this.y < this.context.canvas.height - 48) {
+            this.y += incremento;
         }
         this.teclado.disparou(ESPACO, function() {
             vm.atirar();
         });
+
     },
     desenhar: function() {
-        this.context.drawImage(this.imagem, this.x, this.y, this.imagem.width, this.imagem.height);
-        this.desenharRetangulosDeColisao();
+
+        if (this.teclado.pressionada(SETA_ESQUERDA)) {
+            this.spriteSheet.linha = 1;
+        } else if (this.teclado.pressionada(SETA_DIREITA)) {
+            this.spriteSheet.linha = 2;
+        } else
+            this.spriteSheet.linha = 0;
+
+        this.spriteSheet.desenhar(this.x, this.y);
+        this.spriteSheet.proximoQuadro();
+        //this.desenharRetangulosDeColisao();
     },
     atirar: function() {
         var tiro = new Tiro(this.context, this, 'blue');
@@ -50,7 +65,7 @@ Nave.prototype = {
             x: this.x + 15,
             y: this.y,
             largura: 5,
-            altura: this.imagem.height
+            altura: 48
         }];
     },
     desenharRetangulosDeColisao: function() {

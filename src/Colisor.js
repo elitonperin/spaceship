@@ -10,7 +10,7 @@ Colisor.prototype = {
     },
     processar: function() {
         // Inicio com um objeto vazio
-        var jaTestados = new Object();
+        var jaTestados = {};
 
         for (var i in this.sprites) {
             for (var j in this.sprites) {
@@ -104,4 +104,4 @@ Colisor.prototype = {
         // Substituir o array velho pelo novo
         this.sprites = novoArray;
     }
-}
+};

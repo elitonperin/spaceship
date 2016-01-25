@@ -1,11 +1,12 @@
-function Animador(context, colisor) {
+function Animador(context) {
     this.context = context;
     this.ligado = false;
-    this.colisor = colisor;
     this.sprites = [];
     this.spriteExcluir = [];
     this.processamentos = [];
     this.processamentosExcluir = [];
+    this.ultimoCiclo = 0;
+    this.decorrido = 0;
 }
 Animador.prototype = {
     novoSprite: function(sprite) {
@@ -27,6 +28,11 @@ Animador.prototype = {
         if (!this.ligado) {
             return;
         }
+        var agora = new Date().getTime();
+        if (this.ultimoCiclo === 0)
+            this.ultimoCiclo = agora;
+        this.decorrido = agora - this.ultimoCiclo;
+
         var vm = this;
         var i = 0;
         var quantidade = this.sprites.length;
@@ -44,6 +50,8 @@ Animador.prototype = {
         }
 
         vm.processarExclusoes();
+
+        this.ultimoCiclo = agora;
 
         requestAnimationFrame(function() {
             vm.proximoFrame();

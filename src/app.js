@@ -1,71 +1,92 @@
 (function() {
     window.onload = function() {
-        var imgEspaco = new Image();
-        imgEspaco.src = "images/fundo-espaco.png";
+        var canvas = document.getElementById("myCanvas");
+        var context = canvas.getContext("2d");
+        var imagens = [];
+        var animador = {};
+        var teclado = {};
+        var colisor = {};
+        var nuvens = {};
+        var estrelas = {};
+        var espaco = {};
+        var nave = {};
+        var inimigo = {};
+        var totalImagens = 0;
+        var imagensCarregadas = 0;
 
-        var imgEstrelas = new Image();
-        imgEstrelas.src = "images/fundo-estrelas.png";
+        carregarImagens();
 
-        var imgNuvens = new Image();
-        imgNuvens.src = "images/fundo-nuvens.png";
 
-        var imgNave = new Image();
-        imgNave.src = "images/nave.png";
+        function carregarImagens() {
+            imagens = {
+                espaco: "fundo-espaco.png",
+                estrelas: "fundo-estrelas.png",
+                nuvens: "fundo-estrelas.png",
+                nave: "nave-spritesheet.png",
+                ovni: "ovni.png",
+                explosao: "explosao.png"
+            };
 
-        var imgOvni = new Image();
-        imgOvni.src = "images/ovni.png";
-
-        var carregadas = 0;
-        var total = 5;
-
-        imgEspaco.onload = carregando;
-        imgEstrelas.onload = carregando;
-        imgNuvens.onload = carregando;
-        imgNave.onload = carregando;
-        imgOvni.onload = carregando;
+            for (var i in imagens) {
+                var img = new Image();
+                img.src = 'images/' + imagens[i];
+                img.onload = carregando;
+                imagens[i] = img;
+                totalImagens++;
+            }
+        }
 
         function carregando() {
-            carregadas++;
-            if (carregadas === total)
-                iniciar();
+            imagensCarregadas++;
+            if (imagensCarregadas === totalImagens)
+                iniciarObjetos();
         }
 
-        function iniciar() {
-            var context = document.getElementById("myCanvas").getContext("2d");
-            var teclado = new Teclado(document);
-            var colisor = new Colisor();
-            var animador = new Animador(context, colisor);
+        function iniciarObjetos() {
+            animador = new Animador(context);
+            teclado = new Teclado(document);
+            colisor = new Colisor();
+            espaco = new Fundo(context, imagens.espaco, 60);
+            estrelas = new Fundo(context, imagens.estrelas, 150);
+            nuvens = new Fundo(context, imagens.nuvens, 500);
+            nave = new Nave(context, teclado, imagens.nave, (canvas.width / 2 - 18), (canvas.height - 48), 250);
 
-            animador.novoProcessamento(colisor);
-
-            var fundoEspaco = new Fundo(context, imgEspaco, 3);
-            var fundoEstrelas = new Fundo(context, imgEstrelas, 7);
-            var fundoNuvens = new Fundo(context, imgNuvens, 10);
-
-            var nave = new Nave(context, teclado, imgNave, 100, 100, 10);
-
-            animador.novoSprite(fundoEspaco);
-            animador.novoSprite(fundoEstrelas);
-            animador.novoSprite(fundoNuvens);
-
-            colisor.novoSprite(nave);
+            animador.novoSprite(espaco);
+            animador.novoSprite(estrelas);
+            animador.novoSprite(nuvens);
             animador.novoSprite(nave);
 
-            animador.ligar();
+            colisor.novoSprite(nave);
+            animador.novoProcessamento(colisor);
+            criacaoInimigos();
 
-            setInterval(function() {
-                novoOvni(context, animador, colisor);
-            }, 1000);
+            animador.ligar();
         }
 
-        function novoOvni(context, animador, colisor) {
-            var ovni = new Ovni(context, imgOvni, 0, 0, 0);
-            ovni.x = Math.floor(Math.random() * (context.canvas.width - imgOvni.width + 1));
-            ovni.y = imgOvni.height;
-            ovni.velocidade = Math.floor(Math.random() * 10) + 1;
+        function criacaoInimigos() {
+            criadorInimigos = {
+                ultimoOvni: new Date().getTime(),
+
+                processar: function() {
+                    var agora = new Date().getTime();
+                    var decorrido = agora - this.ultimoOvni;
+                    if (decorrido > 1000) {
+                        novoOvni();
+                        this.ultimoOvni = agora;
+                    }
+                }
+            };
+
+            animador.novoProcessamento(criadorInimigos);
+        }
+
+        function novoOvni() {
+            var ovni = new Ovni(context, imagens.ovni,imagens.explosao);
+            ovni.x = Math.floor(Math.random() * (context.canvas.width - imagens.ovni.width + 1));
+            ovni.y = imagens.ovni.height;
+            ovni.velocidade = Math.floor(Math.random() * 500) + 150;
             colisor.novoSprite(ovni);
             animador.novoSprite(ovni);
-
         }
     };
 }());
