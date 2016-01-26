@@ -3,6 +3,7 @@ var SETA_DIREITA = 39;
 var SETA_CIMA = 38;
 var SETA_BAIXO = 40;
 var ESPACO = 32;
+var ENTER = 13;
 
 function Teclado(elemento) {
     var vm = this;

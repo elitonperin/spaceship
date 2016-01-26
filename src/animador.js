@@ -19,6 +19,7 @@ Animador.prototype = {
     },
     ligar: function() {
         this.ligado = true;
+        this.ultimoCiclo = 0;
         this.proximoFrame();
     },
     desligar: function() {

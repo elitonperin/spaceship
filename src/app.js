@@ -13,9 +13,19 @@
         var inimigo = {};
         var totalImagens = 0;
         var imagensCarregadas = 0;
+        var musicaAcao = null;
 
         carregarImagens();
+        carregarMusicas();
 
+        function carregarMusicas() {
+            musicaAcao = new Audio();
+            musicaAcao.src = "sons/musica-acao.mp3";
+            musicaAcao.load();
+            musicaAcao.volume = 0.5;
+            musicaAcao.loop = true;
+            musicaAcao.play();
+        }
 
         function carregarImagens() {
             imagens = {
@@ -60,6 +70,8 @@
             animador.novoProcessamento(colisor);
             criacaoInimigos();
 
+            teclado.disparou(ENTER, pausarJogo);
+
             animador.ligar();
         }
 
@@ -81,12 +93,34 @@
         }
 
         function novoOvni() {
-            var ovni = new Ovni(context, imagens.ovni,imagens.explosao);
+            var ovni = new Ovni(context, imagens.ovni, imagens.explosao);
             ovni.x = Math.floor(Math.random() * (context.canvas.width - imagens.ovni.width + 1));
             ovni.y = imagens.ovni.height;
             ovni.velocidade = Math.floor(Math.random() * 500) + 150;
             colisor.novoSprite(ovni);
             animador.novoSprite(ovni);
+        }
+
+        function pausarJogo() {
+            if (animador.ligado) {
+                animador.desligar();
+                nave.ativarTiro = false;
+
+                context.save();
+                context.fillStyle = 'white';
+                context.strokeStyle = 'black';
+                context.font = '50px sans-serif';
+                context.fillText("Pausado", 160, 200);
+                context.strokeText("Pausado", 160, 200);
+                context.restore();
+
+                musicaAcao.pause();
+            } else {
+                criadorInimigos.ultimoOvni = new Date().getTime();
+                animador.ligar();
+                nave.ativarTiro = true;
+                musicaAcao.play();
+            }
         }
     };
 }());

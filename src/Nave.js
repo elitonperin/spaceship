@@ -1,3 +1,8 @@
+var SOM_TIRO = new Audio();
+SOM_TIRO.src = 'sons/tiro.mp3';
+SOM_TIRO.volume = 0.2;
+SOM_TIRO.load();
+
 function Nave(context, teclado, imagem, x, y, velocidade) {
     this.context = context;
     this.teclado = teclado;
@@ -10,6 +15,7 @@ function Nave(context, teclado, imagem, x, y, velocidade) {
     this.spriteSheet = new Spritesheet(context, imagem, 3, 2);
     this.spriteSheet.linha = 0;
     this.spriteSheet.intervalo = 100;
+    this.ativarTiro = true;
 }
 Nave.prototype = {
     atualizar: function() {
@@ -46,9 +52,13 @@ Nave.prototype = {
         //this.desenharRetangulosDeColisao();
     },
     atirar: function() {
-        var tiro = new Tiro(this.context, this, 'blue');
-        this.animador.novoSprite(tiro);
-        this.colisor.novoSprite(tiro);
+        if (this.ativarTiro) {
+            SOM_TIRO.currentTime = 0.0;
+            SOM_TIRO.play();
+            var tiro = new Tiro(this.context, this, 'blue');
+            this.animador.novoSprite(tiro);
+            this.colisor.novoSprite(tiro);
+        }
     },
     retangulosColisao: function() {
         return [{
