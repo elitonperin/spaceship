@@ -1,70 +1,33 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on https://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-    <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/script.js"></script>
-
-    <title>Spaceship</title>
-    <meta name="description" content="Jogo de nave desenvolvido em Javascript e html5">
-
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
+	<title>Game</title>
+	<style> 
+	#link_jogar { 
+		/* Inicia oculto */ 
+		display: none;
+		/* Cores e fundo */ 
+		color: yellow; 
+		background: url(./images/botao-jogar.png);
+		/* Fonte */ 
+		font-size: 20px; 
+		font-family: sans-serif;
+		/* Sem sublinhado e com sombra */ 
+		text-decoration: none; 
+		text-shadow: 2px 2px 5px black;
+		/* Posicionamento */ 
+		position: absolute; left: 220px; 
+		top: 330px;
+		/* A imagem do botão é 72x72, descontamos os paddings */ 
+		width: 52px; 
+		height: 26px; 
+		padding: 23px 10px;
+	} 
+	</style>
 </head>
-
 <body>
-
-    <div class="wrapper">
-        <header>
-            <h1 class="title">Spaceship</h1>
-        </header>
-        <div id="container">
-            <p class="tagline">Jogo de nave desenvolvido em Javascript e html5</p>
-            <div id="main" role="main">
-                <div class="download-bar">
-                    <div class="inner">
-                        <a href="https://github.com/nelsonlpco/spaceship/tarball/master" class="download-button tar"><span>Download</span></a>
-                        <a href="https://github.com/nelsonlpco/spaceship/zipball/master" class="download-button zip"><span>Download</span></a>
-                        <a href="https://github.com/nelsonlpco/spaceship" class="code">View Spaceship on GitHub</a>
-                    </div>
-                    <span class="blc"></span><span class="trc"></span>
-                </div>
-                <article class="markdown-body">
-                    <h1>
-<a id="spaceship" class="anchor" href="#spaceship" aria-hidden="true"><span class="octicon octicon-link"></span></a>spaceship</h1>
-
-                    <p>Jogo de nave desenvolvido em Javascript e html5</p>
-
-                    <p>Estudo sobre desenvolvimento de jogos com html5 canvas e javascript. Desenvolvido com base no livro Desenvolva jogos com <b>HTML5 Canvas e JavaScript</b> (<a href="http://www.casadocodigo.com.br/pages/sumario-jogos-html-javascript">http://www.casadocodigo.com.br/pages/sumario-jogos-html-javascript</a>).</p>
-                    <canvas id="myCanvas" width="500" height="500" style="margin-left: 63px; border: solid 1px black;"></canvas>
-                    <script src="javascripts/dist.min.js"></script>
-                </article>
-            </div>
-        </div>
-        <footer>
-            <div class="owner">
-                <p>
-                    <a href="https://github.com/nelsonlpco" class="avatar"><img src="https://avatars3.githubusercontent.com/u/6377861?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/nelsonlpco">nelsonlpco</a> maintains <a href="https://github.com/nelsonlpco/spaceship">Spaceship</a></p>
-            </div>
-            <div class="creds">
-                <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-            </div>
-        </footer>
-    </div>
-    <div class="current-section">
-        <a href="#top">Scroll to top</a>
-        <a href="https://github.com/nelsonlpco/spaceship/tarball/master" class="tar">tar</a><a href="https://github.com/nelsonlpco/spaceship/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-        <p class="name"></p>
-    </div>
-
-
+	<a id='link_jogar' href='javascript: iniciarJogo();'>Jogar</a>
+	<canvas id="myCanvas" width="500" height="500"></canvas>
+	<script src="./javascripts/dist.min.js"></script>
 </body>
-
 </html>
