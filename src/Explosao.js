@@ -11,8 +11,11 @@ function Explosao(context, imagem, x, y) {
     this.spritesheet = new Spritesheet(context, imagem, 1, 5);
     this.spritesheet.intervalo = 75;
     var explosao = this;
+    this.fimDaExplosao = null;
     this.spritesheet.fimDoCiclo = function() {
         explosao.animador.excluirSprite(explosao);
+        if (explosao.fimDaExplosao)
+            explosao.fimDaExplosao();
     };
 
     SOM_EXPLOSAO.currentTime = 0.0;

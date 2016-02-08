@@ -3,7 +3,7 @@ SOM_TIRO.src = 'sons/tiro.mp3';
 SOM_TIRO.volume = 0.2;
 SOM_TIRO.load();
 
-function Nave(context, teclado, imagem, x, y, velocidade) {
+function Nave(context, teclado, imagem, x, y, velocidade, imgExplosao) {
     this.context = context;
     this.teclado = teclado;
     this.imagem = imagem;
@@ -11,6 +11,10 @@ function Nave(context, teclado, imagem, x, y, velocidade) {
     this.x = x;
     this.y = y;
     this.velocidade = velocidade;
+
+    this.vidas = 3;
+    this.acabaramAsVidas = null;
+    this.imgExplosao = imgExplosao;
 
     this.spriteSheet = new Spritesheet(context, imagem, 3, 2);
     this.spriteSheet.linha = 0;
@@ -49,7 +53,6 @@ Nave.prototype = {
 
         this.spriteSheet.desenhar(this.x, this.y);
         this.spriteSheet.proximoQuadro();
-        //this.desenharRetangulosDeColisao();
     },
     atirar: function() {
         if (this.ativarTiro) {
@@ -91,11 +94,36 @@ Nave.prototype = {
         ctx.restore();
     },
     colidiuCom: function(sprite) {
-        /**
         if (sprite instanceof Ovni) {
-            this.animador.desligar();
-            alert("Fim de jogo");
+            this.animador.excluirSprite(this);
+            this.animador.excluirSprite(sprite);
+            this.colisor.excluirSprite(this);
+            this.colisor.excluirSprite(sprite);
+
+            var exp1 = new Explosao(this.context, this.imgExplosao, this.x, this.y);
+            var exp2 = new Explosao(this.context, this.imgExplosao, sprite.x, sprite.y);
+
+            this.animador.novoSprite(exp1);
+            this.animador.novoSprite(exp2);
+
+            var nave = this;
+            exp1.fimDaExplosao = function() {
+                nave.vidas--;
+                if (nave.vidas === 0) {
+                    if (nave.acabaramAsVidas)
+                        nave.acabaramAsVidas();
+                } else {
+                    nave.colisor.novoSprite(nave);
+                    nave.animador.novoSprite(nave);
+
+                    nave.posicionar();
+                }
+            }
         }
-        **/
+    },
+    posicionar: function() {
+        var canvas = this.context.canvas;
+        this.x = canvas.width / 2 - 18;
+        this.y = canvas.height - 48;
     }
 };
