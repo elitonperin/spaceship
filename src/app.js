@@ -27,6 +27,8 @@ function iniciarJogo() {
     btnJogar.style.display = 'none';
     musicaAcao.play();
     animador.ligar();
+    nave.ativarTiro = true;
+    painel.pontuacao = 0;
     teclado.disparou(ENTER, pausarJogo);
 };
 
@@ -127,7 +129,7 @@ function gameOver() {
     musicaAcao.pause();
     musicaAcao.currentTime = 0.0;
     removerInimigos();
-    context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);    
+    context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
     context.save();
     context.fillStyle = 'white';
     context.strokeStyle = 'black';
@@ -139,7 +141,6 @@ function gameOver() {
     mostrarLinkJogar();
 
     nave.vidas = 3;
-    painel.pontuacao = 0;
     nave.posicionar();
     animador.novoSprite(nave);
     colisor.novoSprite(nave);
