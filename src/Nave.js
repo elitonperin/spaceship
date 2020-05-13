@@ -12,7 +12,7 @@ function Nave(context, teclado, imagem, x, y, velocidade, imgExplosao) {
     this.y = y;
     this.velocidade = velocidade;
 
-    this.vidas = 3;
+    this.vidas = 5;
     this.acabaramAsVidas = null;
     this.imgExplosao = imgExplosao;
 
